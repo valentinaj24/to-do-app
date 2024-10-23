@@ -1,0 +1,159 @@
+/* Splošni stil za stran Tasks */
+.tasks-page {
+    display: flex;
+    height: 100vh; /* Sidebar in vsebina bosta zajemala celo višino zaslona */
+  }
+  
+  /* Stil za Sidebar */
+  .sidebar {
+    width: 250px;
+    background-color: #3a6e8f;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding-top: 20px;
+    z-index: 1000; /* Poskrbi, da je nad vsebino */
+  }
+  
+  /* Stil za vsebino strani Tasks */
+  .tasks-content {
+    margin-left: 280px; /* Povečano iz 250px na 280px za več prostora */
+    padding: 20px;
+    width: calc(100% - 280px); /* Poskrbimo, da vsebina zavzema preostali prostor */
+  }
+  
+  .add-task-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .task-input,
+  .task-date-input,
+  .task-category-input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .add-task-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-task-button:hover {
+    background-color: #218838;
+  }
+  
+  .tasks-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .tasks-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .due-date {
+    margin-left: 10px;
+    font-size: 12px;
+    color: gray;
+  }
+  
+  .delete-button {
+    padding: 5px 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    background-color: darkred;
+  }
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+  }
+  
+  .close-button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .save-button {
+    background: green;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  /* Stil za search-bar div */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Stil za input polje */
+  .search-bar input {
+    width: 100%;
+    max-width: 400px; /* Maksimalna širina */
+    padding: 10px 20px; /* Prostor unutar inputa */
+    font-size: 16px; /* Veličina teksta */
+    border: 1px solid #ccc; /* Blaga siva ivica */
+    border-radius: 25px; /* Okrugli uglovi */
+    outline: none; /* Uklanja fokus ivicu */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Blaga senka */
+    transition: all 0.3s ease; /* Prelaz za hover efekat */
+  }
+  
+  /* Hover efekat za input */
+  .search-bar input:hover {
+    border-color: #888; /* Menjanje boje ivice na hover */
+  }
+  
+  /* Fokus efekat za input */
+  .search-bar input:focus {
+    border-color: #007bff; /* Plava ivica na fokus */
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* Plava senka na fokus */
+  }
+  
+  /* Stil za placeholder tekst */
+  .search-bar input::placeholder {
+    color: #aaa; /* Svetlija boja placeholdera */
+    font-style: italic; /* Italik stil za placeholder */
+  }
+  
