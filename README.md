@@ -48,6 +48,32 @@ Projekt je razdeljen na dva glavna dela:
     spring.datasource.url=jdbc:mysql://localhost:3306/todo
     spring.datasource.username=your_username
     spring.datasource.password=your_password
-5.Zaženite aplikacijo z Maven:
-```bash
-    mvn spring-boot:run
+5. Zaženite aplikacijo z Maven:
+   ```bash
+   mvn spring-boot:run
+### Frontend
+
+1. Pojdite v direktorij frontend:
+   ```bash
+   cd frontend
+2. Namestite odvisnosti:
+    ```bash
+   npm install
+3. Zaženite React aplikacijo:
+   ```bash
+   npm start
+
+## Navodila za razvijalce
+
+### Prispevanje
+
+1. Ustvarite kopijo repozitorija.
+2. Ustvarite novo vejo za vašo funkcionalnost:
+   ```bash
+   git checkout -b ime-funkcionalnosti
+3. Opravite spremembe in naredite commit:
+   ```bash
+   git commit -m "Dodana nova funkcionalnost"
+4. Pošljite pull request za pregled.
+    ```bash
+   git pull
