@@ -1,4 +1,4 @@
-# To-Do App
+# To-Do App (Valentina Jovanovic, Andjelina Jelenic, Lazar Cvorovic)
 To-Do Aplikacija je spletna aplikacija za upravljanje nalog, ki omogoča uporabnikom organizacijo in sledenje njihovih dnevnih opravil. Aplikacija uporabniku omogoča ustvarjanje nalog, urejanje, brisanje in označevanje nalog kot dokončanih. Poleg tega aplikacija vključuje funkcionalnosti, kot so kategorije za boljšo organizacijo nalog, možnost pisanja zapiskov in statistiko dokončanih nalog. Vključuje tudi koledar, kjer lahko uporabniki vidijo svoje naloge po datumih.
 
 ### Ključne funkcionalnosti:
