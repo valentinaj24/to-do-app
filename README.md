@@ -133,3 +133,34 @@ Aplikacija je namenjena vsem, ki se želijo organizirati, pa tudi podjetjem ali 
 
 Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljati svoj napredek pri opravljanju nalog.
 
+## Diagram primerov uporabe
+
+### Opis primerov uporabe
+1. Ustvarjanje naloga
+- Opis: Uporabnik lahko vnese nov nalog v sistem, pri čemer lahko določi naslov, opis, rok in prioriteto naloga.
+- Aktivnosti: Uporabnik izpolni obrazec in shrani nalog.
+
+2. Urejanje naloga
+- Opis: Uporabnik lahko spremeni obstoječi nalog, kar vključuje posodabljanje naslova, opisa, roka in prioritete.
+- Aktivnosti: Uporabnik izbere nalog in izbere možnost za urejanje, nato shrani spremembe.
+
+3. Brisanje naloga
+- Opis: Uporabnik lahko odstrani nalog iz sistema, kar pomeni, da se nalog trajno izbriše.
+- Aktivnosti: Uporabnik izbere nalog in potrdi, da želi nalog izbrisati.
+
+4. Označevanje naloga kot dokončan
+- Opis: Uporabnik lahko označi nalog kot dokončan, kar ga premakne med dokončane naloge.
+- Aktivnosti: Uporabnik izbere nalog in klikne na gumb za označevanje kot dokončan.
+
+5. Kategorizacija nalog
+- Opis: Uporabnik lahko dodeli nalogam kategorije, da jih lažje organizira in filtrira.
+- Aktivnosti: Uporabnik izbere kategorijo iz padajočega seznama med ustvarjanjem ali urejanjem naloga.
+
+6. Pregled statistike
+- Opis: Uporabnik lahko pregleda statistiko o svoji produktivnosti, ki prikazuje število dokončanih nalog v določenem obdobju.
+- Aktivnosti: Uporabnik izbere časovno obdobje in si ogleda grafični prikaz napredka.
+
+7. Uporaba koledarja
+- Opis: Uporabnik lahko pregleda naloge po datumih, kar mu omogoča boljše načrtovanje.
+- Aktivnosti: Uporabnik izbere datum na koledarju in si ogleda naloge, ki so dodeljene temu datumu.
+
