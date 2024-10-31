@@ -22,8 +22,22 @@ Projekt je razdeljen na dva glavna dela:
    - Za vsako komponento obstaja CSS datoteka, ki skrbi za stilizacijo.
 
 ### Standardi kodiranja
-- **Backend**: Koda je napisana v **Java**, z uporabo **Spring Boot** ogrodja. Vsi API-ji sledijo principu REST.
-- **Frontend**: Pisano v **JavaScriptu** z uporabo **ReactJS**. Vsaka komponenta je modularna in ločena po datotekah.
+
+# Backend
+
+Koda je napisana v jeziku Java z uporabo ogrodja Spring Boot. Vsi API-ji sledijo REST načelom, kar omogoča enostavno povezovanje in razširljivost aplikacije. Vsaka endpoint metoda sledi konvencijam HTTP metod:
+- `GET` za pridobivanje podatkov
+- `POST` za ustvarjanje
+- `PUT` ali `PATCH` za posodobitev
+- `DELETE` za brisanje
+
+Vsi odzivi so strukturirani v JSON formatu, kar zagotavlja enotno komunikacijo med strežnikom in odjemalcem. Razredi in metode so poimenovani v skladu s konvencijami in opremljeni s komentarji za boljše razumevanje funkcionalnosti. Implementirana je tudi obdelava napak, kar omogoča natančne povratne informacije v primeru neuspeha operacij.
+
+# Frontend
+
+Koda je pisana v JavaScriptu z uporabo knjižnice ReactJS za gradnjo uporabniškega vmesnika. Struktura komponent je modularna, vsaka komponenta pa je ločena v lastni datoteki znotraj mape `components`, kar omogoča ponovno uporabo in večjo berljivost kode. 
+
+Komponente sledijo vzorcu funkcijskega programiranja in uporabljajo hooks, kot sta `useState` in `useEffect`, za obdelavo stanja in življenjskega cikla. Standardi za poimenovanje komponent in spremenljivk sledijo konvenciji camelCase, kar omogoča doslednost in enostavno vzdrževanje kode.
 
 ### Orodja in verzije
 - **Backend**: 
