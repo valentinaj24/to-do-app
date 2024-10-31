@@ -91,3 +91,45 @@ Komponente sledijo vzorcu funkcijskega programiranja in uporabljajo hooks, kot s
 4. Pošljite pull request za pregled.
     ```bash
    git pull
+
+## Vizija projekta
+
+To-Do Aplikacija je namenjena izboljšanju organizacije in produktivnosti uporabnikov pri vsakodnevnem upravljanju nalog. S to aplikacijo želimo uporabnikom omogočiti enostaven in intuitiven način sledenja in organizacije njihovih opravil, ki zajemajo vse od enostavnih vsakodnevnih opravil do kompleksnejših projektov. Cilj aplikacije je postati nepogrešljivo orodje za vsakogar, ki želi učinkovito načrtovati svoje obveznosti in slediti svojemu napredku.
+
+Naša vizija je, da aplikacija uporabnikom omogoča več kot zgolj seznam nalog. Z dodatnimi funkcionalnostmi, kot so kategorizacija nalog, pisanje osebnih zapiskov in vizualni prikaz statistike dokončanih nalog, uporabniki pridobijo globlji vpogled v svoj način dela in napredek. Aplikacija vključuje tudi koledar, ki omogoča pregled nalog po datumih, kar uporabnikom pomaga pri dolgoročnem načrtovanju in postavljanju prioritet.
+
+S tem projektom želimo:
+
+- Omogočiti organizacijo nalog na preprost in pregleden način.
+- Spodbuditi uporabnike k učinkovitemu načrtovanju časa in virov.
+- Pomagati uporabnikom zmanjšati stres, povezan z upravljanjem obveznosti.
+- Podpreti osebni in profesionalni napredek s funkcionalnostmi, ki omogočajo sledenje dosežkom in optimizacijo procesa.
+
+Aplikacija je namenjena vsem, ki se želijo organizirati, pa tudi podjetjem ali ekipam, ki bi lahko želele centralizirano orodje za spremljanje nalog in projektov. Naš dolgoročni cilj je aplikacijo razvijati v smeri prilagodljivega orodja, ki bo ponujalo rešitve za različne tipe uporabnikov in omogočalo prilagoditev delovnih tokov njihovim specifičnim potrebam.
+
+## Besednjak
+
+| Pojem                    | Opis                                                                                                    |
+|--------------------------|---------------------------------------------------------------------------------------------------------|
+| **Nalog**                | Posamezno opravilo, ki ga uporabnik vnese v aplikacijo. Vsak nalog lahko vsebuje naslov, opis, rok za dokončanje in status.  |
+| **Kategorija**           | Skupina nalog, ki omogoča uporabniku, da organizira naloge glede na tip (npr. "Delo", "Osebno", "Šola"). Kategorije izboljšujejo preglednost in omogočajo hitrejše iskanje nalog. |
+| **Označi kot dokončano** | Funkcija, ki uporabniku omogoča, da nalogo označi kot zaključeno, kar jo premakne med dokončane naloge. To prispeva k motivaciji in sledenju napredku.  |
+| **Koledar**              | Prikaz nalog po datumih, ki uporabnikom omogoča pregledovanje in načrtovanje nalog na časovnici. Koledar olajša dolgoročno načrtovanje in usklajevanje nalog z drugimi obveznostmi.  |
+| **Statistika**           | Pogled, ki prikazuje podatke o številu dokončanih nalog v določenem časovnem obdobju, kar uporabnikom omogoča analizo njihove produktivnosti in napredka. Uporabniki lahko vidijo, kako se njihova uspešnost spreminja skozi čas. |
+| **Zapiski**              | Dodatne informacije ali opombe, ki jih uporabnik lahko doda k posameznemu nalogu. Zapiski omogočajo uporabnikom, da vključijo kontekst ali posebne podrobnosti, ki so pomembne za opravljeno nalogo.  |
+| **Prioriteta**           | Označevanje nalog glede na nujnost, kar omogoča uporabnikom, da se osredotočijo na najpomembnejše naloge. Naloge lahko označijo kot visoko, srednjo ali nizko prioriteto. |
+| **Seznam nalog**         | Glavni prikaz vseh nalog, ki jih je uporabnik ustvaril. Uporabnik lahko hitro pregleda vse naloge, jih ureja, briše ali označuje kot dokončane. |
+| **Filtriranje**          | Funkcija, ki omogoča uporabnikom, da prikažejo le tiste naloge, ki ustrezajo določenim kriterijem (npr. naloge z določeno kategorijo ali prioriteto). Filtriranje olajša iskanje in upravljanje nalog. |
+
+
+## Funkcionalnosti aplikacije
+
+- Ustvarjanje, urejanje in brisanje nalog
+- Označevanje nalog kot dokončanih
+- Kategorizacija nalog za boljšo organizacijo
+- Pisanje zapiskov k posameznim nalogam
+- Prikaz statistike dokončanih nalog
+- Koledarski prikaz nalog po datumih
+
+Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljati svoj napredek pri opravljanju nalog.
+
