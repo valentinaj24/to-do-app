@@ -23,7 +23,7 @@ Projekt je razdeljen na dva glavna dela:
 
 ### Standardi kodiranja
 
-# Backend
+#### Backend
 
 Koda je napisana v jeziku Java z uporabo ogrodja Spring Boot. Vsi API-ji sledijo REST načelom, kar omogoča enostavno povezovanje in razširljivost aplikacije. Vsaka endpoint metoda sledi konvencijam HTTP metod:
 - `GET` za pridobivanje podatkov
@@ -33,7 +33,7 @@ Koda je napisana v jeziku Java z uporabo ogrodja Spring Boot. Vsi API-ji sledijo
 
 Vsi odzivi so strukturirani v JSON formatu, kar zagotavlja enotno komunikacijo med strežnikom in odjemalcem. Razredi in metode so poimenovani v skladu s konvencijami in opremljeni s komentarji za boljše razumevanje funkcionalnosti. Implementirana je tudi obdelava napak, kar omogoča natančne povratne informacije v primeru neuspeha operacij.
 
-# Frontend
+#### Frontend
 
 Koda je pisana v JavaScriptu z uporabo knjižnice ReactJS za gradnjo uporabniškega vmesnika. Struktura komponent je modularna, vsaka komponenta pa je ločena v lastni datoteki znotraj mape `components`, kar omogoča ponovno uporabo in večjo berljivost kode. 
 
