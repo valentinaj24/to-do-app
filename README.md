@@ -120,6 +120,7 @@ Aplikacija je namenjena vsem, ki se želijo organizirati, pa tudi podjetjem ali 
 | **Prioriteta**           | Označevanje nalog glede na nujnost, kar omogoča uporabnikom, da se osredotočijo na najpomembnejše naloge. Naloge lahko označijo kot visoko, srednjo ali nizko prioriteto. |
 | **Seznam nalog**         | Glavni prikaz vseh nalog, ki jih je uporabnik ustvaril. Uporabnik lahko hitro pregleda vse naloge, jih ureja, briše ali označuje kot dokončane. |
 | **Filtriranje**          | Funkcija, ki omogoča uporabnikom, da prikažejo le tiste naloge, ki ustrezajo določenim kriterijem (npr. naloge z določeno kategorijo ali prioriteto). Filtriranje olajša iskanje in upravljanje nalog. |
+| **Obvestila in opomniki** | Funkcionalnost, ki omogoča uporabniku, da nastavi opomnike za določene naloge in prejme obvestila pred rokom naloge. To uporabnika opozori na pomembne naloge in prispeva k učinkovitemu načrtovanju.|
 
 
 ## Funkcionalnosti aplikacije
@@ -130,6 +131,7 @@ Aplikacija je namenjena vsem, ki se želijo organizirati, pa tudi podjetjem ali 
 - Pisanje zapiskov k posameznim nalogam
 - Prikaz statistike dokončanih nalog
 - Koledarski prikaz nalog po datumih
+- Nastavitev obvestil in opomnikov za naloge
 
 Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljati svoj napredek pri opravljanju nalog.
 
@@ -166,3 +168,6 @@ Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljat
 - Opis: Uporabnik lahko pregleda naloge po datumih, kar mu omogoča boljše načrtovanje.
 - Aktivnosti: Uporabnik izbere datum na koledarju in si ogleda naloge, ki so dodeljene temu datumu.
 
+8. Obvestila in opomniki
+- Opis: Uporabnik lahko nastavi opomnike za določene naloge, da prejme obvestila pred rokom naloge. Obvestila pomagajo uporabniku ostati na tekočem z nalogami, ki jih mora dokončati.
+- Aktivnosti: Uporabnik izbere možnost nastavitve opomnika pri ustvarjanju ali urejanju naloge ter določi čas opomnika. Ko se čas opomnika približa, uporabnik prejme obvestilo.
