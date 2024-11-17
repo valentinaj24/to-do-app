@@ -136,7 +136,8 @@ Aplikacija je namenjena vsem, ki se želijo organizirati, pa tudi podjetjem ali 
 Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljati svoj napredek pri opravljanju nalog.
 
 ## Diagram primerov uporabe
-![DPU1](https://github.com/user-attachments/assets/2e12dc2d-206f-4a8b-9f3c-45c7eebc0bcf)
+![DPU](https://github.com/user-attachments/assets/23d2d32d-ca08-43d1-9578-be3b140df1cc)
+
 
 
 ### Opis primerov uporabe
