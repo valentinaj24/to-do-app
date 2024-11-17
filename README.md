@@ -172,3 +172,110 @@ Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljat
 8. Obvestila in opomniki
 - Opis: Uporabnik lahko nastavi opomnike za določene naloge, da prejme obvestila pred rokom naloge. Obvestila pomagajo uporabniku ostati na tekočem z nalogami, ki jih mora dokončati.
 - Aktivnosti: Uporabnik izbere možnost nastavitve opomnika pri ustvarjanju ali urejanju naloge ter določi čas opomnika. Ko se čas opomnika približa, uporabnik prejme obvestilo.
+
+## Razredni diagram
+![class_diagram](https://github.com/user-attachments/assets/e30ffc4c-9009-47c5-898e-c06340c3ec51)
+
+
+## Opis razrednega diagrama
+### 1. *Uporabnik*
+- *Vloga:* Predstavlja entiteto uporabnika aplikacije, ki lahko ustvarja, ureja in briše naloge ter nastavlja opomnike in pregleduje obvestila.
+- *Ključni atributi:*
+  - id: Edinstven identifikator uporabnika.
+  - ime, email, geslo: Podatki za identifikacijo in prijavo uporabnika.
+- *Ključne metode:*
+  - registriraj(): Registrira novega uporabnika v sistem in shrani njegove podatke.
+  - prijavi(): Prijavi uporabnika v aplikacijo, če so prijavni podatki pravilni.
+  - odjavi(): Izvede odjavo uporabnika in zaključi trenutno sejo.
+
+---
+
+### 2. *Nalog*
+- *Vloga:* Predstavlja posamezne naloge, ki jih ustvarijo uporabniki. Vključuje podrobnosti o nalogi, kot so naslov, opis, rok, status in kategorija.
+- *Ključni atributi:*
+  - id: Edinstven identifikator naloga.
+  - naslov, opis, rok: Podrobnosti naloga.
+  - status: Status naloga, definiran preko enumeracije (*Status*: "Aktivno", "Dokončano").
+  - kategorija: Kategorija naloga (npr. "Personal", "Work").
+- *Ključne metode:*
+  - ustvariNalog(uporabnik: Uporabnik): Nalog: Ustvari nov nalog za določenega uporabnika z vsemi potrebnimi podrobnostmi.
+  - urediNalog(nalog: Nalog): void: Posodobi obstoječi nalog z novimi informacijami.
+  - izbrisiNalog(nalog: Nalog): void: Izbriše nalog iz sistema.
+  - oznaciKotDokoncan(nalog: Nalog): void: Spremeni status naloga na "Dokončano".
+
+---
+
+### 3. *Opomnik*
+- *Vloga:* Predstavlja opomnike, ki so povezani z nalogami. Uporabniki jih nastavijo za opozarjanje na določen čas ali datum.
+- *Ključni atributi:*
+  - id: Edinstven identifikator opomnika.
+  - datumInCas: Datum in čas, kdaj naj se prikaže opomnik.
+  - sporocilo: Vsebina opomnika.
+- *Ključne metode:*
+  - nastaviOpomnik(nalog: Nalog, datumInCas: LocalDateTime): Opomnik: Nastavi nov opomnik za določen nalog.
+  - odstraniOpomnik(opomnik: Opomnik): void: Odstrani obstoječi opomnik iz sistema.
+
+---
+
+### 4. *Obvestilo*
+- *Vloga:* Predstavlja obvestila, ki jih sistem pošlje uporabnikom na podlagi njihovih opomnikov.
+- *Ključni atributi:*
+  - id: Edinstven identifikator obvestila.
+  - vsebina: Vsebina obvestila.
+  - datumInCas: Datum in čas, kdaj je bilo obvestilo poslano.
+- *Ključne metode:*
+  - posljiObvestilo(uporabnik: Uporabnik, kanal: KanalObveščanja): void: Pošlje obvestilo uporabniku preko izbranega kanala (SMS, e-pošta).
+  - preloziObvestilo(opomnik: Opomnik, novCas: LocalDateTime): void: Preloži čas pošiljanja obvestila.
+
+---
+
+### 5. *KanalObveščanja*
+- *Vloga:* Predstavlja različne kanale obveščanja (SMS, e-pošta), preko katerih se obvestila pošiljajo uporabnikom.
+- *Ključni atributi:*
+  - id: Edinstven identifikator kanala.
+  - tip: Enumeracija (*Tip*: "SMS", "Email").
+- *Ključne metode:*
+  - izberiKanal(tip: String): KanalObveščanja: Izbere kanal, preko katerega bo obvestilo poslano.
+  - posljiObvestilo(uporabnik: Uporabnik, obvestilo: Obvestilo): void: Izvede pošiljanje obvestila preko določenega kanala.
+
+---
+
+### 6. *Enumeracije*
+- *Status:* Definira status naloga ("Aktivno", "Dokončano").
+- *Kategorija:* Določa kategorijo naloga (npr. "Personal", "Work").
+- *Tip:* Določa tip kanala obveščanja ("SMS", "Email").
+
+---
+
+## Ključne metode in njihove naloge
+
+### Upravljanje uporabnikov
+Metode za registracijo, prijavo in odjavo zagotavljajo osnovno upravljanje uporabnikov in njihovo interakcijo s sistemom. Te funkcionalnosti vključujejo:
+- *Registracija*: Uporabnikom omogoča ustvarjanje novih računov.
+- *Prijava*: Preverjanje uporabniških podatkov za dostop do sistema.
+- *Odjava*: Varno zaprtje uporabniške seje.
+
+### Upravljanje nalog
+Metode za ustvarjanje, urejanje, brisanje in označevanje nalog so ključne za izvajanje osnovne funkcionalnosti aplikacije. Te vključujejo:
+- *Ustvarjanje nalog*: Dodajanje novih nalog v uporabniški seznam.
+- *Urejanje nalog*: Spreminjanje podrobnosti obstoječih nalog.
+- *Brisanje nalog*: Odstranjevanje nalog iz sistema.
+- *Označevanje nalog*: Sledenje statusu nalog, na primer kot dokončane.
+
+### Upravljanje opomnikov
+Metode za nastavitev in odstranitev opomnikov uporabnikom pomagajo slediti rokom. Funkcionalnosti vključujejo:
+- *Nastavitev opomnikov*: Uporabnikom omogoča prejemanje opomnikov za določene naloge.
+- *Odstranitev opomnikov*: Preklic opomnikov, ki niso več potrebni.
+
+### Pošiljanje obvestil
+Metode za pošiljanje in prilagoditev obvestil omogočajo pravočasno obveščanje uporabnikov. Funkcionalnosti vključujejo:
+- *Pošiljanje obvestil*: Uporabnikom posreduje informacije o nalogah, opomnikih ali spremembah.
+- *Prilagoditev obvestil*: Omogoča prilagajanje vsebine in pogostosti obvestil.
+
+### Izbira kanalov
+Metode za izbiro kanala obveščanja zagotavljajo fleksibilnost v načinu komunikacije. Uporabniki lahko izbirajo med različnimi kanali, kot so:
+- *E-pošta*
+- *SMS*
+
+
+
