@@ -184,9 +184,9 @@ Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljat
   - id: Edinstven identifikator uporabnika.
   - ime, email, geslo: Podatki za identifikacijo in prijavo uporabnika.
 - *Ključne metode:*
-  - registriraj(): Registrira novega uporabnika v sistem in shrani njegove podatke.
-  - prijavi(): Prijavi uporabnika v aplikacijo, če so prijavni podatki pravilni.
-  - odjavi(): Izvede odjavo uporabnika in zaključi trenutno sejo.
+  - registriraj(uporabnik: Uporabnik): Registrira novega uporabnika v sistem in shrani njegove podatke.
+  - prijavi(uporabnik: Uporabnik): Prijavi uporabnika v aplikacijo, če so prijavni podatki pravilni.
+  - odjavi(uporabnik: Uporabnik): Izvede odjavo uporabnika in zaključi trenutno sejo.
 
 ---
 
@@ -224,7 +224,7 @@ Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljat
   - vsebina: Vsebina obvestila.
   - datumInCas: Datum in čas, kdaj je bilo obvestilo poslano.
 - *Ključne metode:*
-  - posljiObvestilo(uporabnik: Uporabnik, kanal: KanalObveščanja): void: Pošlje obvestilo uporabniku preko izbranega kanala (SMS, e-pošta).
+  - posljiObvestilo(uporabnik: Uporabnik, kanal: KanalObveščanja): void: Pošlje obvestilo uporabniku preko izbranega kanala (Profile message, e-pošta).
   - preloziObvestilo(opomnik: Opomnik, novCas: LocalDateTime): void: Preloži čas pošiljanja obvestila.
 
 ---
@@ -233,7 +233,7 @@ Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljat
 - *Vloga:* Predstavlja različne kanale obveščanja (SMS, e-pošta), preko katerih se obvestila pošiljajo uporabnikom.
 - *Ključni atributi:*
   - id: Edinstven identifikator kanala.
-  - tip: Enumeracija (*Tip*: "SMS", "Email").
+  - tip: Enumeracija (*Tip*: "Profile message", "Email").
 - *Ključne metode:*
   - izberiKanal(tip: String): KanalObveščanja: Izbere kanal, preko katerega bo obvestilo poslano.
   - posljiObvestilo(uporabnik: Uporabnik, obvestilo: Obvestilo): void: Izvede pošiljanje obvestila preko določenega kanala.
@@ -243,7 +243,7 @@ Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljat
 ### 6. *Enumeracije*
 - *Status:* Definira status naloga ("Aktivno", "Dokončano").
 - *Kategorija:* Določa kategorijo naloga (npr. "Personal", "Work").
-- *Tip:* Določa tip kanala obveščanja ("SMS", "Email").
+- *Tip:* Določa tip kanala obveščanja ("Profile message", "Email").
 
 ---
 
@@ -275,7 +275,7 @@ Metode za pošiljanje in prilagoditev obvestil omogočajo pravočasno obveščan
 ### Izbira kanalov
 Metode za izbiro kanala obveščanja zagotavljajo fleksibilnost v načinu komunikacije. Uporabniki lahko izbirajo med različnimi kanali, kot so:
 - *E-pošta*
-- *SMS*
+- *Profile message*
 
 
 
