@@ -5,12 +5,13 @@ import com.example.demo.models.Task;
 import com.example.demo.models.User;
 import com.example.demo.services.CategoryService;
 import com.example.demo.services.TaskService;
-import com.example.demo.services.UserService;  // Dodaj import za UserService
+import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +67,6 @@ public class TaskController {
 
 
 
-
     // Get all tasks
     @GetMapping("/all")
     public ResponseEntity<List<Task>> getAllTasks() {
@@ -114,9 +114,18 @@ public class TaskController {
         }
     }
 
-
-
-
-
-
+    @PostMapping("/add-reminder")
+    public ResponseEntity<Task> addReminder(@RequestParam Long taskId,
+                                            @RequestParam String notificationType,
+                                            @RequestParam LocalDateTime reminderTime) {
+        Optional<Task> taskOpt = taskService.getTaskById(taskId);
+        if (taskOpt.isPresent()) {
+            Task task = taskOpt.get();
+            task.setNotificationType(notificationType);
+            task.setReminderTime(reminderTime);
+            Task updatedTask = taskService.saveTask(task);
+            return ResponseEntity.ok(updatedTask);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }

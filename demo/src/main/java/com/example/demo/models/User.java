@@ -20,6 +20,9 @@ public class User {
 
     private String name;
 
+    @Column
+    private String message;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Task> tasks;
@@ -28,6 +31,14 @@ public class User {
     private List<Note> notes;
 
     // Getters and Setters
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public Long getId() {
         return id;

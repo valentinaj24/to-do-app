@@ -67,7 +67,13 @@ public class UserController {
         }
     }
 
-
-
+    @GetMapping("/profile")
+    public ResponseEntity<User> getUserProfile(@RequestParam Long userId) {
+        Optional<User> user = userService.getUserById(userId);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 }
