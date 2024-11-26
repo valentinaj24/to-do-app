@@ -136,7 +136,8 @@ Aplikacija je namenjena vsem, ki se želijo organizirati, pa tudi podjetjem ali 
 Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljati svoj napredek pri opravljanju nalog.
 
 ## Diagram primerov uporabe
-![DPU](https://github.com/user-attachments/assets/23d2d32d-ca08-43d1-9578-be3b140df1cc)
+![DPU](https://github.com/user-attachments/assets/e5852b17-eeb1-4f47-85b8-28310a0ac9f8)
+
 
 
 
@@ -174,7 +175,8 @@ Ta aplikacija pomaga uporabnikom organizirati in optimizirati čas ter spremljat
 - Aktivnosti: Uporabnik izbere možnost nastavitve opomnika pri ustvarjanju ali urejanju naloge ter določi čas opomnika. Ko se čas opomnika približa, uporabnik prejme obvestilo.
 
 ## Razredni diagram
-![class_diagram](https://github.com/user-attachments/assets/e30ffc4c-9009-47c5-898e-c06340c3ec51)
+![class_diagram](https://github.com/user-attachments/assets/4ac5f5b2-fa6a-434d-904c-321e3104c3d3)
+
 
 
 ## Opis razrednega diagrama
