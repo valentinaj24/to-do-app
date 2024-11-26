@@ -14,6 +14,33 @@ function Tasks() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
 
+  const [reminderTask, setReminderTask] = useState(null); // Task za koji postavljamo opomnik
+  const [notificationType, setNotificationType] = useState('email'); // Tip obaveštenja
+  const [reminderTime, setReminderTime] = useState(''); // Vreme opomnika
+
+
+  const handleAddReminder = async () => {
+    if (!reminderTask || !notificationType || !reminderTime) {
+      alert('Please select a task, notification type, and reminder time.');
+      return;
+    }
+    try {
+      await axios.post('http://localhost:8080/api/tasks/add-reminder', null, {
+        params: {
+          taskId: reminderTask.id,
+          notificationType,
+          reminderTime,
+        },
+      });
+      alert('Reminder added successfully!');
+      setReminderTask(null); // Zatvaranje modal-a
+      setNotificationType('email'); // Reset tipa obaveštenja
+      setReminderTime(''); // Reset vremena opomnika
+    } catch (error) {
+      console.error('Error adding reminder:', error);
+    }
+  };
+
   // Funkcija za editovanje taska
   const handleEditTask = (task) => {
     setCurrentTask({ ...task });
@@ -117,109 +144,143 @@ function Tasks() {
       console.error('Error updating task status:', error);
     }
   };
-  
+
 
   const filteredTasks = tasks.filter(task => task.text.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className="tasks-page">
-      <Sidebar />
-      <div className="tasks-content">
-        <h2>Manage Your Tasks</h2>
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+      <div className="tasks-page">
+        <Sidebar />
+        <div className="tasks-content">
+          <h2>Manage Your Tasks</h2>
+          <div className="search-bar">
+            <input
+                type="text"
+                placeholder="Search tasks..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-        <div className="add-task-form">
-          <input
-            type="text"
-            placeholder="Enter a new task"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            className="task-input"
-          />
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="task-date-input"
-          />
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="task-category-input"
-          >
-            <option value="">Select Category</option>
-            {categories.map(category => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-          <button onClick={handleAddTask} className="add-task-button">
-            Add Task
-          </button>
-        </div>
+          <div className="add-task-form">
+            <input
+                type="text"
+                placeholder="Enter a new task"
+                value={newTask}
+                onChange={(e) => setNewTask(e.target.value)}
+                className="task-input"
+            />
+            <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="task-date-input"
+            />
+            <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="task-category-input"
+            >
+              <option value="">Select Category</option>
+              {categories.map(category => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+              ))}
+            </select>
+            <button onClick={handleAddTask} className="add-task-button">
+              Add Task
+            </button>
+          </div>
 
-        <div className="tasks-list">
-          <h3>Your Tasks</h3>
-          <ul>
-            {filteredTasks.map(task => (
-              <li key={task.id}>
-                {/* <input
+          <div className="tasks-list">
+            <h3>Your Tasks</h3>
+            <ul>
+              {filteredTasks.map(task => (
+                  <li key={task.id}>
+                    {/* <input
                   type="checkbox"
                   checked={task.completed}
                   onChange={() => handleToggleComplete(task.id, task.completed)}
                 /> */}
-                {task.text} <span className="due-date">Due: {task.due}</span>
-                <button onClick={() => handleEditTask(task)} className="edit-button">Edit</button>
-                <button onClick={() => handleDeleteTask(task.id)} className="delete-button">Delete</button>
-              </li>
-            ))}
-          </ul>
-        </div>
+                    {task.text} <span className="due-date">Due: {task.due}</span>
+                    <button onClick={() => handleEditTask(task)} className="edit-button">Edit</button>
 
-        {/* Modal za uređivanje */}
-        {isEditing && (
-          <div className="modal">
-            <div className="modal-content">
-              <h3>Edit Task</h3>
-              <input
-                type="text"
-                value={currentTask.text}
-                onChange={(e) => setCurrentTask({ ...currentTask, text: e.target.value })}
-                className="task-input"
-              />
-              <input
-                type="date"
-                value={currentTask.due}
-                onChange={(e) => setCurrentTask({ ...currentTask, due: e.target.value })}
-                className="task-date-input"
-              />
-              <select
-                value={currentTask.category?.id || ''}
-                onChange={(e) => setCurrentTask({ ...currentTask, category: { id: e.target.value } })}
-                className="task-category-input"
-              >
-                <option value="">Select Category</option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-              <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
-              <button onClick={() => setIsEditing(false)} className="close-button">Cancel</button>
-            </div>
+                    <button onClick={() => setReminderTask(task)} className="reminder-button">Add Reminder</button>
+
+
+                    <button onClick={() => handleDeleteTask(task.id)} className="delete-button">Delete</button>
+                  </li>
+              ))}
+            </ul>
           </div>
-        )}
+
+          {/* Modal za uređivanje */}
+          {isEditing && (
+              <div className="modal">
+                <div className="modal-content">
+                  <h3>Edit Task</h3>
+                  <input
+                      type="text"
+                      value={currentTask.text}
+                      onChange={(e) => setCurrentTask({ ...currentTask, text: e.target.value })}
+                      className="task-input"
+                  />
+                  <input
+                      type="date"
+                      value={currentTask.due}
+                      onChange={(e) => setCurrentTask({ ...currentTask, due: e.target.value })}
+                      className="task-date-input"
+                  />
+                  <select
+                      value={currentTask.category?.id || ''}
+                      onChange={(e) => setCurrentTask({ ...currentTask, category: { id: e.target.value } })}
+                      className="task-category-input"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map(category => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                    ))}
+                  </select>
+                  <button onClick={handleSaveChanges} className="save-button">Save Changes</button>
+                  <button onClick={() => setIsEditing(false)} className="close-button">Cancel</button>
+                </div>
+              </div>
+          )}
+
+          {/* Modal za postavljanje opomnika */}
+          {reminderTask && (
+              <div className="modal">
+                <div className="modal-content">
+                  <h3>Set Reminder for Task: {reminderTask.text}</h3>
+                  <label>
+                    Reminder Time:
+                    <input
+                        type="datetime-local"
+                        value={reminderTime}
+                        onChange={(e) => setReminderTime(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Notification Type:
+                    <select
+                        value={notificationType}
+                        onChange={(e) => setNotificationType(e.target.value)}
+                    >
+                      <option value="email">Email</option>
+                      <option value="profile">Profile Message</option>
+                    </select>
+                  </label>
+                  <button onClick={handleAddReminder} className="save-button">Save Reminder</button>
+                  <button onClick={() => setReminderTask(null)} className="close-button">Cancel</button>
+                </div>
+              </div>
+          )}
+
+        </div>
       </div>
-    </div>
   );
 }
 
