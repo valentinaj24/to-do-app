@@ -45,12 +45,14 @@ public class Task {
     public Task() {
         this.notificationSent = false; // Podrazumevana vrednost
     }
-    public Task(String text, LocalDate due, boolean completed, Category category, User user) {
+    public Task(String text, LocalDate due, boolean completed,Category category, User user,  LocalDateTime reminderTime) {
         this.text = text;
         this.due = due;
         this.completed = completed;
         this.category = category;
         this.user = user;
+        this.reminderTime=reminderTime;
+
     }
     @Override
     public String toString() {

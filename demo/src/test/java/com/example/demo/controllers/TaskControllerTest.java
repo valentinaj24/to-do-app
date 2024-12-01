@@ -4,14 +4,12 @@ import com.example.demo.models.Task;
 import com.example.demo.models.User;
 import com.example.demo.services.TaskService;
 import com.example.demo.services.UserService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +33,14 @@ class TaskControllerTest {
     void testSaveTask_Success() {
         // Pozitiven testni scenarij
         User user = new User(7L, "lazarcvorovic2003@gmail.com", "lazar");
-        Task task = new Task("Test Task", LocalDate.now(), false, null, null);
+        Task task = new Task(
+                "Test Task",
+                LocalDate.now(),
+                false,
+                null,
+                null,
+                LocalDateTime.now()
+        );
 
         when(userService.getUserById(7L)).thenReturn(Optional.of(user));
         when(taskService.saveTask(any(Task.class))).thenReturn(task);
@@ -50,7 +55,14 @@ class TaskControllerTest {
     @Test
     void testSaveTask_UserNotFound() {
         // Negativen testni scenarij
-        Task task = new Task("Test Task", LocalDate.now(), false, null, null);
+        Task task = new Task(
+                "Test Task",
+                LocalDate.now(),
+                true,
+                null,
+                null,
+                LocalDateTime.now()
+        );
 
         when(userService.getUserById(7L)).thenReturn(Optional.empty());
 
@@ -60,9 +72,59 @@ class TaskControllerTest {
         assertNull(response.getBody());
     }
 
+
+
+    @RepeatedTest(3)
+    @DisplayName("Ažuriranje naloge - uspešno")
+    void testUpdateTask_Success() {
+        // Simulacija obstoječe naloge
+        Task existingTask = new Task(
+                "Old Task",
+                LocalDate.now(), // LocalDate za due
+                false,
+                null,
+                null,
+                LocalDateTime.now() // LocalDateTime za reminderTime
+        );
+
+        Task updatedTask = new Task(
+                "Updated Task",
+                LocalDate.now().plusDays(1), // LocalDate za due
+                true,
+                null,
+                null,
+                LocalDateTime.now().plusDays(1) // LocalDateTime za reminderTime
+        );
+
+        when(taskService.getTaskById(1L)).thenReturn(Optional.of(existingTask));
+        when(taskService.saveTask(any(Task.class))).thenReturn(updatedTask);
+
+        // Klic metode v kontrolerju
+        ResponseEntity<Task> response = taskController.updateTask(1L, updatedTask);
+
+        // Preverjanje rezultatov
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Updated Task", response.getBody().getText());
+    }
+
+    @Test
+    @Disabled("Funkcionalnost trenutno ni na voljo")
+    void testAddReminder_TaskNotFound() {
+        // Simulacija neobstoječe naloge
+        when(taskService.getTaskById(1L)).thenReturn(Optional.empty());
+
+        // Klic metode v kontrolerju
+        ResponseEntity<Task> response = taskController.addReminder(1L, "email", LocalDateTime.now().plusDays(1));
+
+        // Preverjanje rezultatov
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
     @AfterEach
     void tearDown() {
-        Task testTask = null; // Ponastavi testne objekte
+        Task testTask = null; 
         System.out.println("Test končan, stanje očiščeno.");
 
     }
