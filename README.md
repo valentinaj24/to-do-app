@@ -279,5 +279,36 @@ Metode za izbiro kanala obveščanja zagotavljajo fleksibilnost v načinu komuni
 - *E-pošta*
 - *Profile message*
 
+---
+
+## Testiranje
+
+### *Testi*
+Za preverjanje funkcionalnosti aplikacije smo dodali enotne teste, ki pokrivajo vse ključne funkcionalnosti:
+- *Dodajanje nalog* (pozitivni in negativni scenariji).
+- *Prijava uporabnikov* (pozitivni in negativni scenariji).
+- *Ažuriranje nalog* in *dodajanje opomnikov*.
+
+### *Lokacija testov*
+Testi se nahajajo v mapi:
+`src/test/java/com/example/demo/controllers/`
+
+### *Poročilo o testiranju*
+V mapi testiranje smo dodali dokument **porocilo_testiranja.md**, ki vključuje:
+- Opis testov (pokrite funkcionalnosti in scenariji).
+- Rezultate testiranja.
+- Analizo uspešnosti in zaključke.
+
+### *Lokacija poročila*
+Mapa z dokumentacijo o testiranju:
+`testiranje/porocilo_testiranja.md` 
+
+## Kako zagnati teste
+
+1. Prepričajte se, da imate nameščene vse potrebne odvisnosti v *pom.xml*
+2. Zaženite teste z uporabo ukaza:
+   ```bash
+   mvn test
+3. Preglejte rezultate testov v konzoli ali v orodju za razvoj (npr. IntelliJ IDEA, Eclipse).
 
 
