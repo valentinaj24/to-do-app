@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Register.css'; // Import CSS za stilizacijo
+import './Register.css'; 
+import { useNavigate } from 'react-router-dom';
+
 
 function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
 
   const handleRegister = async () => {
     try {
@@ -19,6 +23,7 @@ function Register() {
       setName('');
       setEmail('');
       setPassword('');
+      navigate('/login');
     } catch (error) {
       console.error('Registration error:', error);
       setMessage('Error registering user. Please try again.');

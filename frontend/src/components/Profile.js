@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css';
+import Sidebar from './Sidebar';
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -44,32 +45,44 @@ function Profile() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('user'); // Ukloni korisničke podatke
+    localStorage.removeItem('isAuthenticated'); // Ukloni autentifikaciju
+    window.location.href = '/login'; // Preusmeri na login stranicu
+  };
+
   if (!user) {
     return <div>Loading user data...</div>;
   }
 
   return (
+    <div>
+      <Sidebar />
       <div className="profile-container">
         <h2>User Profile</h2>
         <div className="profile-details">
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Email:</strong> {user.email}</p>
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
         <div className="messages-section">
           <h3>Messages</h3>
           {messages.length > 0 ? (
-              <ul>
-                {messages.map((message) => (
-                    <li key={message.id}>
-                      {message.content} - <small>{new Date(message.timestamp).toLocaleString()}</small>
-                    </li>
-                ))}
-              </ul>
+            <ul>
+              {messages.map((message) => (
+                <li key={message.id}>
+                  {message.content} - <small>{new Date(message.timestamp).toLocaleString()}</small>
+                </li>
+              ))}
+            </ul>
           ) : (
-              <p>No messages available.</p>
+            <p>No messages available.</p>
           )}
         </div>
       </div>
+    </div>
   );
 }
 
