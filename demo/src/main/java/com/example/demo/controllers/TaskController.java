@@ -28,6 +28,13 @@ public class TaskController {
     @Autowired
     private CategoryService categoryService;
 
+    public TaskController(TaskService taskService, UserService userService, CategoryService categoryService) {
+        this.taskService = taskService;
+        this.userService = userService;
+        this.categoryService = categoryService;
+    }
+
+
     @GetMapping
     public ResponseEntity<List<Task>> getTasksByUserId(@RequestParam Long userId) {
         List<Task> tasks = taskService.getTasksByUserId(userId);

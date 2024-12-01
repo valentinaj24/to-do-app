@@ -15,7 +15,7 @@ public class ReminderScheduler {
     @Autowired
     private ReminderService reminderService;
 
-    @Scheduled(fixedRate = 60000) // Poziva se svakih 60 sekundi
+    @Scheduled(fixedRate = 6000000) // Poziva se svakih 60 sekundi
     public void checkReminders() {
         logger.info("Scheduler triggered every minute");
         reminderService.sendReminders();

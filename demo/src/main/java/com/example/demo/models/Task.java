@@ -45,6 +45,18 @@ public class Task {
     public Task() {
         this.notificationSent = false; // Podrazumevana vrednost
     }
+    public Task(String text, LocalDate due, boolean completed, Category category, User user) {
+        this.text = text;
+        this.due = due;
+        this.completed = completed;
+        this.category = category;
+        this.user = user;
+    }
+    @Override
+    public String toString() {
+        return "Task{text='" + text + "', due='" + due + "', completed=" + completed + "}";
+    }
+
 
     public LocalDateTime getReminderTime() {
         return reminderTime;
