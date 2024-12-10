@@ -36,6 +36,8 @@ public class User {
         this.password = password;
     }
 
+    protected User() {
+    }
 
     // Getters and Setters
 
