@@ -124,7 +124,7 @@ class TaskControllerTest {
 
     @AfterEach
     void tearDown() {
-        Task testTask = null; 
+        Task testTask = null;
         System.out.println("Test končan, stanje očiščeno.");
 
     }

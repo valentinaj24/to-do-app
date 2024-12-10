@@ -18,6 +18,102 @@ function Tasks() {
   const [notificationType, setNotificationType] = useState('email'); // Tip obaveštenja
   const [reminderTime, setReminderTime] = useState(''); // Vreme opomnika
 
+  const [attachments, setAttachments] = useState([]); // Shranjevanje prilog za izbrano nalogo
+
+  const [showAttachmentsModal, setShowAttachmentsModal] = useState(false); // Kontrola modala
+  const [currentAttachments, setCurrentAttachments] = useState([]); // Prilozi za prikaz
+  const [currentTaskName, setCurrentTaskName] = useState(''); // Ime trenutnog taska
+
+  const fetchAttachments = async (taskId, taskName) => {
+    try {
+      const response = await axios.get(
+          `http://localhost:8080/api/tasks/${taskId}/attachments`
+      );
+      setCurrentAttachments(response.data); // Postavi priložene fajlove za prikaz
+      setCurrentTaskName(taskName); // Postavi ime trenutnog taska za prikaz
+      setShowAttachmentsModal(true); // Prikaži modal
+    } catch (error) {
+      console.error("Error fetching attachments:", error);
+    }
+  };
+
+
+
+
+  const [selectedFiles, setSelectedFiles] = useState([]); // Za shranjevanje izbranih datotek
+
+  const handleFileChange = (e) => {
+    const allowedFileTypes = [
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+      "application/pdf",
+      "application/msword", // .doc
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+      "application/rtf", // .rtf
+    ];
+
+    const files = [...e.target.files];
+    const validFiles = files.filter((file) => allowedFileTypes.includes(file.type));
+
+    if (validFiles.length !== files.length) {
+      alert("Some files have unsupported formats and will not be uploaded.");
+    }
+
+    setSelectedFiles(validFiles);
+  };
+
+
+  const handleAddTaskWithAttachments = async () => {
+    if (!newTask.trim() || !dueDate || !selectedCategory) {
+      alert("Please fill all fields!");
+      return;
+    }
+
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || !user.id) {
+        console.error("User ID not found.");
+        return;
+      }
+
+      // 1. Ustvari nalogo brez prilog
+      const response = await axios.post(
+          "http://localhost:8080/api/tasks/save",
+          {
+            text: newTask,
+            due: dueDate,
+            category: { id: selectedCategory },
+            completed: false,
+          },
+          { params: { userId: user.id } }
+      );
+
+      const taskId = response.data.id;
+
+      // 2. Naloži priloge (če obstajajo)
+      if (selectedFiles.length > 0) {
+        const formData = new FormData();
+        selectedFiles.forEach((file) => {
+          formData.append("file", file);
+        });
+        console.log("FormData Content:", [...formData.entries()]);
+
+        await axios.post(
+            `http://localhost:8080/api/tasks/${taskId}/attachments`,
+            formData,
+            { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      }
+
+
+      alert("Task added successfully with attachments!");
+      fetchTasks(); // Osveži seznam nalog
+    } catch (error) {
+      console.error("Error adding task with attachments:", error);
+    }
+  };
+
 
   const handleAddReminder = async () => {
     if (!reminderTask || !notificationType || !reminderTime) {
@@ -145,7 +241,6 @@ function Tasks() {
     }
   };
 
-
   const filteredTasks = tasks.filter(task => task.text.toLowerCase().includes(search.toLowerCase()));
 
   return (
@@ -188,7 +283,18 @@ function Tasks() {
                   </option>
               ))}
             </select>
-            <button onClick={handleAddTask} className="add-task-button">
+
+            <label className="file-input-label">
+              Choose Files
+              <input
+                  type="file"
+                  className="file-input"
+                  multiple
+                  onChange={handleFileChange}
+              />
+            </label>
+
+            <button onClick={handleAddTaskWithAttachments} className="add-task-button">
               Add Task
             </button>
           </div>
@@ -196,24 +302,67 @@ function Tasks() {
           <div className="tasks-list">
             <h3>Your Tasks</h3>
             <ul>
-              {filteredTasks.map(task => (
+              {filteredTasks.map((task) => (
                   <li key={task.id}>
-                    {/* <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={() => handleToggleComplete(task.id, task.completed)}
-                /> */}
-                    {task.text} <span className="due-date">Due: {task.due}</span>
+                    <span>{task.text}</span> <span className="due-date">Due: {task.due}</span>
                     <button onClick={() => handleEditTask(task)} className="edit-button">Edit</button>
-
                     <button onClick={() => setReminderTask(task)} className="reminder-button">Add Reminder</button>
-
-
                     <button onClick={() => handleDeleteTask(task.id)} className="delete-button">Delete</button>
+
+                    <button onClick={() => fetchAttachments(task.id, task.text)} className="view-attachments-button">
+                      View Attachments
+                    </button>
+
+
+                    {/* Prikaz priloga samo za trenutni task */}
+                    {attachments.length > 0 && (
+                        <ul className="attachments-list">
+                          {attachments.map((attachment) => (
+                              <li key={attachment.id}>
+                                <a
+                                    href={`/${attachment.filePath}`} // Ili koristite ispravan URL za fajlove
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                  {attachment.fileName}
+                                </a>
+                              </li>
+                          ))}
+                        </ul>
+                    )}
                   </li>
+
               ))}
             </ul>
           </div>
+          {/* Modal za prikaz priloga */}
+          {showAttachmentsModal && (
+              <div className="modal">
+                <div className="modal-content">
+                  <h3>Attachments for Task: {currentTaskName}</h3>
+                  {currentAttachments.length > 0 ? (
+                      <ul className="attachments-list">
+                        {currentAttachments.map((attachment) => (
+                            <li key={attachment.id}>
+                              <a
+                                  href={`/${attachment.fileName}`} // Koristite ispravan URL za fajlove
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                              >
+                                {attachment.fileName}
+                              </a>
+                            </li>
+                        ))}
+                      </ul>
+                  ) : (
+                      <p>No attachments found for this task.</p>
+                  )}
+                  <button onClick={() => setShowAttachmentsModal(false)} className="close-button">
+                    Close
+                  </button>
+                </div>
+              </div>
+          )}
 
           {/* Modal za uređivanje */}
           {isEditing && (
@@ -285,3 +434,5 @@ function Tasks() {
 }
 
 export default Tasks;
+
+
