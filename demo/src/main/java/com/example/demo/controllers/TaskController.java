@@ -1,8 +1,11 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.AttachmentDTO;
+import com.example.demo.models.Attachment;
 import com.example.demo.models.Category;
 import com.example.demo.models.Task;
 import com.example.demo.models.User;
+import com.example.demo.repositories.AttachmentRepository;
 import com.example.demo.services.CategoryService;
 import com.example.demo.services.TaskService;
 import com.example.demo.services.UserService;
@@ -10,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +32,10 @@ public class TaskController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private AttachmentRepository attachmentRepository;
+
 
     public TaskController(TaskService taskService, UserService userService, CategoryService categoryService) {
         this.taskService = taskService;
@@ -135,4 +144,72 @@ public class TaskController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @PostMapping("/{taskId}/attachments")
+    public ResponseEntity<String> uploadAttachment(
+            @PathVariable Long taskId,
+            @RequestParam("file") MultipartFile file) {
+
+        try {
+            System.out.println("Received file for task ID: " + taskId);
+            System.out.println("File name: " + file.getOriginalFilename());
+            System.out.println("File size: " + file.getSize());
+
+            // Validacija tipa fajla
+            String fileType = file.getContentType();
+            System.out.println("File type: " + fileType);
+
+            // Lista dozvoljenih tipova fajlova
+            List<String> allowedFileTypes = List.of(
+                    "image/png",
+                    "image/jpeg",
+                    "image/jpg",
+                    "application/pdf",
+                    "application/msword", // .doc
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+                    "application/rtf" // .rtf
+            );
+
+            if (!allowedFileTypes.contains(fileType)) {
+                System.out.println("Unsupported file type");
+                return ResponseEntity.badRequest().body("Unsupported file type: " + fileType);
+            }
+
+            // Logika za čuvanje fajla u bazi
+            Task task = taskService.getTaskById(taskId).orElseThrow(() ->
+                    new RuntimeException("Task not found"));
+
+            Attachment attachment = new Attachment();
+            attachment.setTask(task);
+            attachment.setFileName(file.getOriginalFilename());
+            attachmentRepository.save(attachment);
+
+            System.out.println("Attachment saved to database");
+
+            return ResponseEntity.ok("File uploaded successfully!");
+        } catch (Exception e) {
+            System.out.println("Error uploading file: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error uploading file: " + e.getMessage());
+        }
+    }
+
+
+
+    @GetMapping("/{taskId}/attachments")
+    public ResponseEntity<List<AttachmentDTO>> getAttachmentsByTaskId(@PathVariable Long taskId) {
+        List<Attachment> attachments = attachmentRepository.findByTaskId(taskId);
+
+        // Mapirajte Attachment na AttachmentDTO
+        List<AttachmentDTO> attachmentDTOs = attachments.stream()
+                .map(attachment -> new AttachmentDTO(attachment.getId(), attachment.getFileName()))
+                .toList();
+
+        return ResponseEntity.ok(attachmentDTOs);
+    }
+
+
+
+
 }
