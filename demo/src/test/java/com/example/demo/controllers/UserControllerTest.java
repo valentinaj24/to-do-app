@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -24,43 +25,57 @@ class UserControllerTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserController userController;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this); // Inicializacija mockov
+        MockitoAnnotations.openMocks(this);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"test@example.com"})
     @DisplayName("Prijava uporabnikov - uspešno")
     void testLoginUser_Success(String email) {
-        // Simulacija obstoječega uporabnika
-        User user = new User(1L, email, "password");
-        when(userService.getUserByEmail(email)).thenReturn(Optional.of(user));
+        // "Hash" u bazi (može biti bilo šta ovde, jer matches se mokuje)
+        User stored = new User(1L, email, "$2b$12$SOME_HASH_VALUE");
+        when(userService.getUserByEmail(email)).thenReturn(Optional.of(stored));
 
-        // Klic metode v kontrolerju
-        ResponseEntity<User> response = userController.loginUser(new User(null, email, "password"));
+        // Kažemo da je kombinacija raw "password" + "hash" ispravna
+        when(passwordEncoder.matches("password", stored.getPassword())).thenReturn(true);
 
-        // Preverjanje rezultatov
+        // Poziv kontrolera
+        ResponseEntity<User> response =
+                userController.loginUser(new User(null, email, "password"));
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(email, response.getBody().getEmail());
+
+        verify(userService).getUserByEmail(email);
+        verify(passwordEncoder).matches("password", stored.getPassword());
     }
 
     @Test
     @Timeout(1)
     void testLoginUser_InvalidPassword() {
-        // Simulacija obstoječega uporabnika
-        User user = new User(1L, "test@example.com", "password");
-        when(userService.getUserByEmail("test@example.com")).thenReturn(Optional.of(user));
+        String email = "test@example.com";
+        User stored = new User(1L, email, "$2b$12$SOME_HASH_VALUE");
+        when(userService.getUserByEmail(email)).thenReturn(Optional.of(stored));
 
-        // Klic metode z napačnim geslom
-        ResponseEntity<User> response = userController.loginUser(new User(null, "test@example.com", "wrongpassword"));
+        // Sad matches vraća false
+        when(passwordEncoder.matches("wrongpassword", stored.getPassword())).thenReturn(false);
 
-        // Preverjanje rezultatov
+        ResponseEntity<User> response =
+                userController.loginUser(new User(null, email, "wrongpassword"));
+
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertNull(response.getBody());
-}
+
+        verify(userService).getUserByEmail(email);
+        verify(passwordEncoder).matches("wrongpassword", stored.getPassword());
+    }
 }

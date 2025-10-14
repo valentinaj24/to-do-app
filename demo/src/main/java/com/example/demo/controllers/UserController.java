@@ -2,8 +2,8 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.User;
 import com.example.demo.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,12 +14,16 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
+    public UserController(UserService userService,
+                          PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-
-    // Create or Update User
+    // Create or Update User (pretpostavka: heširanje radi u UserService.saveUser)
     @PostMapping("/save")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         User savedUser = userService.saveUser(user);
@@ -48,34 +52,27 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    // LOGIN (isti potpis kao ranije, ali bezbedna provera lozinke)
     @PostMapping("/login")
     public ResponseEntity<User> loginUser(@RequestBody User loginDetails) {
-        System.out.println("Attempting login for: " + loginDetails.getEmail());
-        Optional<User> user = userService.getUserByEmail(loginDetails.getEmail());
-
-        if (user.isPresent()) {
-            System.out.println("User found: " + user.get().getEmail());
-            System.out.println("Entered password: " + loginDetails.getPassword());
-            System.out.println("Stored password: " + user.get().getPassword());
-            if (user.get().getPassword().equals(loginDetails.getPassword())) {
-                return ResponseEntity.ok(user.get());
-            } else {
-                System.out.println("Passwords do not match");
-                return ResponseEntity.status(401).body(null);
-            }
-        } else {
-            System.out.println("User not found with email: " + loginDetails.getEmail());
+        Optional<User> userOpt = userService.getUserByEmail(loginDetails.getEmail());
+        if (userOpt.isEmpty()) {
             return ResponseEntity.status(401).body(null);
         }
+        User user = userOpt.get();
+
+        // poredi raw lozinku iz zahteva sa BCRYPT hash-om iz baze
+        boolean ok = passwordEncoder.matches(loginDetails.getPassword(), user.getPassword());
+        if (!ok) {
+            return ResponseEntity.status(401).body(null);
+        }
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/profile")
     public ResponseEntity<User> getUserProfile(@RequestParam Long userId) {
         Optional<User> user = userService.getUserById(userId);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        }
-        return ResponseEntity.notFound().build();
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 }

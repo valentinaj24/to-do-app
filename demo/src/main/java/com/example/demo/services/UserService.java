@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -10,34 +11,46 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@CrossOrigin(origins = "http://localhost:3000")
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    // Create or Update User
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public User saveUser(User user) {
+        if (user.getId() == null) {
+            if (!isBCrypt(user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+            return userRepository.save(user);
+        }
+
+        User existing = userRepository.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + user.getId()));
+
+        String newPass = user.getPassword();
+
+        if (newPass == null || newPass.isBlank()) {
+            user.setPassword(existing.getPassword());
+        } else if (!isBCrypt(newPass)) {
+            user.setPassword(passwordEncoder.encode(newPass));
+        }
         return userRepository.save(user);
     }
 
-    // Read all users
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    private boolean isBCrypt(String value) {
+        return value != null && value.startsWith("$2") && value.length() >= 56;
     }
 
-    // Read single user by ID
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
-    }
+    public List<User> getAllUsers() { return userRepository.findAll(); }
 
-    // Delete user
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
+    public Optional<User> getUserById(Long id) { return userRepository.findById(id); }
 
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+    public void deleteUser(Long id) { userRepository.deleteById(id); }
 
+    public Optional<User> getUserByEmail(String email) { return userRepository.findByEmail(email); }
 }

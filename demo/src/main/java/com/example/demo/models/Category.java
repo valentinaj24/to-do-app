@@ -12,8 +12,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
+
+    public Category() {}
+    public Category(String name) { this.name = name; }
 
     // Prekinite serijalizaciju zadataka u JSON kako bi se izbegla rekurzija
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
