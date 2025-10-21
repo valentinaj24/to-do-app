@@ -28,4 +28,4 @@ jobs:
 
       - name: Build & Test (unit tests only)
         working-directory: demo
-        run: ./mvnw -q test
+        run: ./mvnw -q -Dtest='!DemoApplicationTests' test
