@@ -1,98 +1,92 @@
 # Poročilo o testiranju
 
-## Opis testov
+### Opseg in cilji
 
-### 1. Dodajanje naloge - pozitiven scenarij (`testSaveTask_Success`)
-- Preverja, ali se naloga uspešno doda za obstoječega uporabnika.
-- Simulirano z `Mockito`, kjer uporabnik obstaja, naloga pa je pravilno shranjena s pravilnimi podatki.
-- Sistem vrne HTTP status **200 OK**, kar potrjuje uspešno delovanje funkcionalnosti.
+Pokritih je 5 različnih metod:
 
-### 2. Dodajanje naloge - negativen scenarij (`testSaveTask_UserNotFound`)
-- Preverja, ali se naloga ne doda, če uporabnik ne obstaja.
-- Simulirano z `Mockito`, kjer uporabnik ne obstaja, kar povzroči, da kontroler zavrne zahtevo.
-- Sistem vrne HTTP status **400 BAD_REQUEST**, kar potrjuje pravilno obravnavo napak.
+- UserController.loginUser
+- TaskController.saveTask
+- TaskController.updateTask
+- TaskController.addReminder
+- UserService.saveUser
 
-### 3. Prijava uporabnikov - pozitiven scenarij (`testLoginUser_Success`)
-- Preverja, ali se uporabnik uspešno prijavi z veljavnim e-poštnim naslovom in geslom.
-- Simulirano z `Mockito`, kjer uporabnik obstaja v sistemu in se pravilno preveri geslo.
-- Sistem vrne HTTP status **200 OK**, kar potrjuje, da je prijava uspešna.
-- Test uporablja parametrizacijo, da preveri prijavo za različne e-poštne naslove.
+Za vsako metodo so pripravljeni pozitivni in negativni/robni scenariji
 
-### 4. Prijava uporabnikov - negativen scenarij (`testLoginUser_InvalidPassword`)
-- Preverja, ali sistem zavrne prijavo, če je geslo napačno.
-- Simulirano z `Mockito`, kjer uporabnik obstaja v sistemu, vendar je geslo napačno.
-- Sistem vrne HTTP status **401 UNAUTHORIZED**, kar potrjuje pravilno obravnavo napake.
+### Okolje in orodja
+- JDK: 17
+- Build: Maven (mvnw)
+- Testni okvir: JUnit 5
+- Mocking: Mockito
+- Zagon testov:
+- - Windows: mvnw.cmd test
+- - macOS/Linux: ./mvnw test
 
-### 5. Ažuriranje naloge - pozitiven scenarij (`testUpdateTask_Success`)
-- Preverja, ali se naloga uspešno posodobi z veljavnimi podatki.
-- Simulirano z `Mockito`, kjer naloga obstaja v sistemu in se uspešno posodobi z novim opisom, datumom in stanjem.
-- Sistem vrne HTTP status **200 OK**, kar potrjuje, da je posodobitev naloge uspela.
-- Test je ponovljen 3-krat z uporabo **`@RepeatedTest(3)`**.
+### Povzetek testov
 
-### 6. Dodajanje opomnika - negativen scenarij (`testAddReminder_TaskNotFound`)
-- Preverja, ali sistem pravilno obravnava situacijo, ko naloga ne obstaja.
-- Simulirano z `Mockito`, kjer naloga z določenim ID-jem ne obstaja v sistemu.
-- Sistem vrne HTTP status **404 NOT_FOUND**, kar potrjuje pravilno obravnavo napake.
-- Test je označen kot **onemogočen** z anotacijo `@Disabled`, saj funkcionalnost trenutno ni na voljo.
-
----
-
-## Člani skupine in odgovornosti
-
----
-
-## **Valentina Jovanovic**
-### Kratka analiza uspešnosti testov
-
-- **Vsi testi so bili uspešno izvedeni.**
-    - Pozitiven testni scenarij je potrdil, da se naloga pravilno shrani za obstoječega uporabnika.
-    - Negativen testni scenarij je potrdil, da sistem pravilno zavrne zahteve za neobstoječega uporabnika.
-
-### Napake
-- Nobenih napak ni bilo odkritih med testiranjem.
-- Testiranje je pokazalo, da aplikacija pravilno ravna v vseh obravnavanih situacijah.
+| # | Razred / metoda              | Scenarij            | Pričakovano                                           |
+|---|------------------------------|---------------------|--------------------------------------------------------|
+| 1 | `UserController.loginUser`   | pravilno geslo      | 200 OK + vrnjen User (brez gesla)                     |
+| 2 | `UserController.loginUser`   | napačno geslo       | 401 UNAUTHORIZED, brez telesa                          |
+| 3 | `TaskController.saveTask`    | uporabnik obstaja   | 200 OK + vrnjen Task                                   |
+| 4 | `TaskController.saveTask`    | uporabnik ne obstaja| 400 BAD_REQUEST, brez klica `saveTask`                 | 
+| 5 | `TaskController.updateTask`  | naloga obstaja      | 200 OK + posodobljen Task                              | 
+| 6 | `TaskController.updateTask`  | naloga ne obstaja   | 404 NOT_FOUND, brez `saveTask`                         | 
+| 7 | `TaskController.addReminder` | naloga obstaja      | 200 OK (ali 204), nastavljen reminder                  | 
+| 8 | `TaskController.addReminder` | naloga ne obstaja   | 404 NOT_FOUND                                          | 
+| 9 | `UserService.saveUser`       | veljavno geslo      | geslo zamenjano z hashom + `repo.save()` poklican      |
+|10 | `UserService.saveUser`       | robni: `password=null` | (trenutno) brez `encode`, user shranjen, `password=null` |
 
 
-### Zaključek
+### Podrobnosti po metodi
 
-- Celotno testiranje funkcionalnosti za dodajanje nalog je bilo uspešno izvedeno.
-- Testi potrjujejo pravilno delovanje sistema tako v pozitivnih kot v negativnih scenarijih.
+### `UserController.loginUser`
 
----
+**Opis:** Preveri prijavo uporabnika (BCrypt `matches`).  
+**Verifikacije:** `verify(userService).getUserByEmail(email)`, `verify(passwordEncoder).matches(raw, hash)` (pri negativnem scenariju).
 
-## **Lazar Cvorovic**
-### Kratka analiza uspešnosti testov
-
-- **Vsi testi so bili uspešno izvedeni.**
-  - Pozitiven testni scenarij je potrdil, da se uporabniki z veljavnimi podatki uspešno prijavijo.
-  - Negativen testni scenarij je potrdil, da sistem pravilno zavrne prijavo z napačnim geslom.
-
-### Napake
-- Nobenih napak ni bilo odkritih med testiranjem.
-- Testiranje je pokazalo, da aplikacija pravilno ravna v vseh obravnavanih situacijah.
-
-### Zaključek
-
-- Celotno testiranje funkcionalnosti prijave uporabnikov je bilo uspešno izvedeno.
-- Testi potrjujejo pravilno delovanje sistema tako v pozitivnih kot v negativnih scenarijih.
-
----
-
-## **Andjelina Jelenic**
-### Kratka analiza uspešnosti testov
-
-- **Vsi testi so bili uspešno izvedeni.**
-  - Pozitiven testni scenarij je potrdil, da se naloga pravilno posodobi z veljavnimi podatki.
-  - Negativen testni scenarij je potrdil, da test za dodajanje opomnika je bil začasno onemogočen, saj funkcionalnost trenutno ni na voljo.
+| Test              | Vhod                                        | Pričakovano                                   | 
+|-------------------|---------------------------------------------|-----------------------------------------------|
+| Success           | email=`test@example.com`, pass=`password`   | 200, telo vsebuje uporabnika (brez gesla)     | 
+| Invalid password  | email=`test@example.com`, pass=`wrong`      | 401, brez telesa                              |
 
 
-### Napake
-- Nobenih napak ni bilo odkritih med testiranjem.
-- Testiranje je pokazalo, da aplikacija pravilno ravna v situacijah, kjer so podatki veljavni ali naloga ne obstaja.
+### `TaskController.saveTask`
 
-### Zaključek
+**Opis:** Ustvarjanje naloge za obstoječega uporabnika.
 
-- Celotno testiranje funkcionalnosti za ažuriranje nalog in dodajanje opomnikov je bilo uspešno izvedeno.
-- Testi potrjujejo pravilno delovanje sistema za posodobitve nalog ter obravnavo neobstoječih nalog pri dodajanju opomnikov.
+| Test           | Vhod                               | Pričakovano                                          | 
+|----------------|------------------------------------|------------------------------------------------------|
+| Success        | userId=`7`, text=`"Test Task"`     | 200, telo vsebuje Task (`text="Test Task"`)          | 
+| User not found | userId ne obstaja                  | 400, brez telesa; `taskService.saveTask` ni poklican |
 
----
+
+### `TaskController.updateTask`
+
+**Opis:** Posodobitev obstoječe naloge.
+
+| Test      | Vhod                                      | Pričakovano                        |
+|-----------|-------------------------------------------|------------------------------------|
+| Success   | taskId=`1`, nov text=`"Updated Task"`     | 200, telo vsebuje posodobljen Task | 
+| Not found | taskId=`999`                              | 404, brez telesa                   | 
+
+
+### `TaskController.addReminder`
+
+**Opis:** Nastavitev opomnika (reminder) na nalogo.
+
+| Test      | Vhod                                        | Pričakovano                                                                 |
+|-----------|---------------------------------------------|-----------------------------------------------------------------------------|
+| Success   | naloga obstaja, type=`email`, time=`T+1d`   | 200 OK **ali** 204; `notificationType="email"`, nastavljen `reminderTime`  | 
+| Not found | naloga ne obstaja                           | 404, brez telesa                                                            | 
+
+
+
+### `UserService.saveUser`
+
+**Opis:** Heširanje gesla in shranjevanje uporabnika.
+
+| Test                      | Vhod                                           | Pričakovano                                                           | 
+|---------------------------|------------------------------------------------|-----------------------------------------------------------------------|
+| hashesPassword_andPersists| email=`ana@example.com`, pass=`"lozinka123"`   | geslo zamenjano z hashom (npr. `"$2b$hash"`); poklican `repo.save()`  |
+| edge: null password       | email=`ana@example.com`, pass=`null`           | (trenutno) brez `encode`; poklican `repo.save()`; `password=null`     | 
+
