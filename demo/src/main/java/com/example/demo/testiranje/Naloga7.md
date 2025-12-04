@@ -174,4 +174,3 @@ Priporočljivo je:
 - razbitje daljših metod,
 - uvedba enotnih testov za dvig pokritosti kode.
 
-Aplikacija je stabilna, dobro strukturirana in pripravljena za nadaljnji razvoj.
