@@ -1,7 +1,16 @@
 package com.example.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+
+
 import java.util.List;
 
 @Entity
@@ -15,7 +24,12 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-    public Category() {}
+    /**
+     * Default constructor required by JPA.
+     */
+    public Category() {
+    }
+
     public Category(String name) { this.name = name; }
 
     // Prekinite serijalizaciju zadataka u JSON kako bi se izbegla rekurzija

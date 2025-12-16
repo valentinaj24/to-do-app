@@ -2,7 +2,15 @@ package com.example.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+
 import java.util.List;
 
 @Entity
@@ -38,6 +46,9 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * Default constructor required by JPA.
+     */
     protected User() {
     }
 

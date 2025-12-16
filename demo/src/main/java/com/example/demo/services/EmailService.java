@@ -16,12 +16,19 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     public void sendEmail(String to, String subject, String body) {
-        logger.info("Sending email to: " + to + ", subject: " + subject);
+        if (logger.isInfoEnabled()) {
+            logger.info("Sending email to: {}, subject: {}", to, subject);
+        }
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
         mailSender.send(message);
-        logger.info("Email sent successfully to: " + to);
+
+        if (logger.isInfoEnabled()) {
+            logger.info("Email sent successfully to: {}", to);
+        }
     }
+
 }

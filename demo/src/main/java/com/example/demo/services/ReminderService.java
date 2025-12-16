@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-import com.example.demo.models.Message;
 import com.example.demo.models.Task;
 import com.example.demo.repositories.TaskRepository;
 import jakarta.transaction.Transactional;
@@ -25,43 +24,55 @@ public class ReminderService {
     private EmailService emailService;
 
     @Autowired
-    private MessageService messageService; // Novi servis za poruke
+    private MessageService messageService;
 
     @Transactional
     public void sendReminders() {
-        logger.info("sendReminders() invoked");
+        if (logger.isInfoEnabled()) {
+            logger.info("sendReminders() invoked");
+        }
 
-        List<Task> tasks = taskRepository.findAll(); // Učitaj sve zadatke iz baze
-        LocalDate today = LocalDate.now(); // Današnji datum
+        List<Task> tasks = taskRepository.findAll();
+        LocalDate today = LocalDate.now();
 
         for (Task task : tasks) {
-            logger.info("Checking task: " + task.getText());
+            if (logger.isInfoEnabled()) {
+                logger.info("Checking task: {}", task.getText());
+            }
 
-            // Proveri da li je rok zadatka sutradan
-            if (task.getDue() != null &&
-                    !Boolean.TRUE.equals(task.getNotificationSent()) && // Proveri da li je poslato
-                    task.getDue().minusDays(1).equals(today)) {
+            if (task.getDue() != null
+                    && !Boolean.TRUE.equals(task.getNotificationSent())
+                    && task.getDue().minusDays(1).equals(today)) {
 
-                logger.info("Sending reminder for task: " + task.getText());
+                if (logger.isInfoEnabled()) {
+                    logger.info("Sending reminder for task: {}", task.getText());
+                }
 
                 if ("email".equalsIgnoreCase(task.getNotificationType())) {
-                    logger.info("Sending email to: " + task.getUser().getEmail());
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Sending email to: {}", task.getUser().getEmail());
+                    }
                     emailService.sendEmail(
                             task.getUser().getEmail(),
                             "Task Reminder",
                             "Reminder: The deadline for your task \"" + task.getText() + "\" is tomorrow!"
                     );
                 } else if ("profile".equalsIgnoreCase(task.getNotificationType())) {
-                    String messageContent = "Reminder: The deadline for your task \"" + task.getText() + "\" is tomorrow!";
-                    logger.info("Creating message for user: " + task.getUser().getEmail() + ", message: " + messageContent);
+                    String messageContent =
+                            "Reminder: The deadline for your task \"" + task.getText() + "\" is tomorrow!";
 
-                    // Kreiranje nove poruke za korisnika
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Creating message for user: {}, message: {}",
+                                task.getUser().getEmail(), messageContent);
+                    }
+
                     messageService.createMessage(task.getUser().getId(), messageContent);
                 }
 
                 task.setNotificationSent(true);
-                taskRepository.save(task); // Sačuvaj izmene u bazi
+                taskRepository.save(task);
             }
         }
     }
+
 }
