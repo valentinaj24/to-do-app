@@ -8,12 +8,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class DemoApplication {
 
-    private DemoApplication() {
-        // Prevent instantiation
+    public DemoApplication() {
     }
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
 }
+
 

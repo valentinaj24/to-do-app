@@ -29,3 +29,12 @@ jobs:
       - name: Build & Test (unit tests only)
         working-directory: demo
         run: ./mvnw -q -Dtest='!DemoApplicationTests' test
+
+      - name: SonarCloud analyze
+        working-directory: demo
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          ./mvnw -q -DskipTests sonar:sonar \
+            -Dsonar.organization=valentinaj24 \
+            -Dsonar.projectKey=valentinaj24_to-do-app
