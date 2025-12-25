@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: ["**"]
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   backend:
     name: Backend (Maven + JDK 21)
@@ -14,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -26,15 +32,18 @@ jobs:
         working-directory: demo
         run: chmod +x ./mvnw
 
-      - name: Build & Test (unit tests only)
+      - name: Build & Test
         working-directory: demo
-        run: ./mvnw -q -Dtest='!DemoApplicationTests' test
+        run: ./mvnw -q clean verify
 
-      - name: SonarCloud analyze
-        working-directory: demo
+      - name: SonarCloud analysis
+        uses: SonarSource/sonarqube-scan-action@v3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          ./mvnw -q -DskipTests sonar:sonar \
-            -Dsonar.organization=valentinaj24 \
+        with:
+          args: >
+            -Dsonar.organization=valentinaj24
             -Dsonar.projectKey=valentinaj24_to-do-app
+            -Dsonar.sources=demo/src/main
+            -Dsonar.tests=demo/src/test
+            -Dsonar.java.binaries=demo/target/classes
